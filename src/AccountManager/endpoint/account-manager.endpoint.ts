@@ -45,7 +45,6 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
       .use(this._basicAuthModel)
       .use(this._jwtAccessSetup)
       .use(this._jwtRefreshSetup)
-
       .post(
         "/signin",
         async ({
@@ -74,7 +73,7 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
               set.status = response.statusCode;
               return response.message;
             }
-            set.status = STATUS_CODE.BAD_REQUEST;
+            set.status = response.statusCode;
             return response;
           },
         }
@@ -118,7 +117,6 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
         id: refreshId,
       });
       const hashedToken = new Bun.CryptoHasher("sha512").update(refreshToken).digest("hex");
-
       const dtoRefreshToken: TInsertToken = {
         id: refreshId,
         userId: dataRes.id,

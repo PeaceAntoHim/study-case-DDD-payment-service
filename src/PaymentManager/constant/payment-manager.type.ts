@@ -12,3 +12,5 @@ export type TPaymentAccountDTO = {
   paymentNumber: string;
   balance: number;
 };
+
+export type TPaymentRes = { statusCode: number; message: string };

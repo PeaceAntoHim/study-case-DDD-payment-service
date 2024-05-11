@@ -1,4 +1,4 @@
-import { TTransactionDTO } from "@/PaymentManager/constant/payment-manager.type";
+import { TPaymentAccountDTO, TTransactionDTO } from "@/PaymentManager/constant/payment-manager.type";
 import { IPaymentManagerCommand } from "./payment-manager.interface";
 import { IPaymentManagerService } from "@/PaymentManager/domain/payment-manager.interface";
 
@@ -7,6 +7,7 @@ export class PaymentManagerCommand implements IPaymentManagerCommand {
   constructor(service: IPaymentManagerService) {
     this._service = service;
   }
+
   private _processTransaction(transaction: TTransactionDTO): Promise<string> {
     return new Promise((resolve, reject) => {
       console.log("Transaction processing started for:", transaction);
@@ -44,5 +45,12 @@ export class PaymentManagerCommand implements IPaymentManagerCommand {
         console.error("transaction processing failed:", error.message);
         return `transaction processing failed: ${error.message}`;
       });
+  }
+
+  async createAccount(data: TPaymentAccountDTO): Promise<string | undefined> {
+    try {
+      const account = await this._service.addPaymentAccount(data);
+      return account as string;
+    } catch (error: any) {}
   }
 }
