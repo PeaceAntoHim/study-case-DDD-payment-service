@@ -99,10 +99,11 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
         id: refreshId,
       });
       const hashedToken = new Bun.CryptoHasher("sha512").update(refreshToken).digest("hex");
+
       const dtoRefreshToken: TInsertToken = {
-        hashedToken: hashedToken,
         id: refreshId,
         userId: dataRes.id,
+        hashedToken: hashedToken,
       };
       await this._command.refreshToken(dtoRefreshToken);
       auth.set({
@@ -113,6 +114,8 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
         maxAge: 1 * 86400,
         path: "/api/transaction",
       });
+
+      console.log(await jwtAccess.verify(auth.value));
 
       return {
         message: dataRes,
