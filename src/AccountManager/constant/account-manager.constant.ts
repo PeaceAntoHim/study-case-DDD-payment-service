@@ -10,3 +10,5 @@ export enum STATUS_CODE {
   UNAUTHORIZED = 401,
   INTERNAL_SERVER_ERROR = 500,
 }
+
+export const sleep = (time = 1000) => new Promise((resolve) => setTimeout(resolve, time));

@@ -10,7 +10,7 @@ import {
   TSigninRes,
   TSignupRes,
 } from "../constant/account-manager.type";
-import { STATUS_CODE } from "../constant/account-manager.constant";
+import { STATUS_CODE, sleep } from "../constant/account-manager.constant";
 import { randomUUID } from "crypto";
 import { IAccountManagerCommand } from "../application/command/account-manager.interface";
 
@@ -61,6 +61,12 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
         }) => await this.signin(jwtAccess, jwtRefresh, auth, body),
         {
           body: "basicAuthModel",
+          beforeHandle: [
+            function setup() {},
+            async function delay() {
+              await sleep();
+            },
+          ],
           afterHandle({ response, set }: { response: TSigninRes | any; set: TCustomSetElysia }) {
             if (response.statusCode === 200) {
               console.log(response);
@@ -80,6 +86,12 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
           email: t.String({ minLength: 10, maxLength: 50 }),
           password: t.String({ minLength: 8, maxLength: 32 }),
         }),
+        beforeHandle: [
+          function setup() {},
+          async function delay() {
+            await sleep();
+          },
+        ],
       });
   }
 
