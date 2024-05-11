@@ -4,11 +4,9 @@ import { IAccountManagerQuery } from "./account-manager.interface";
 
 export class AccountManagerQuery implements IAccountManagerQuery {
   private _service;
-  private _hasher;
 
   constructor(edtechService: IAccountManagerService) {
     this._service = edtechService;
-    this._hasher = Bun.password;
   }
 
   private _validateEmail = (param: string): boolean => {
@@ -28,6 +26,12 @@ export class AccountManagerQuery implements IAccountManagerQuery {
     const existingUser = await this._service.get(email);
     if (!existingUser) {
       return `User ${NOT_FOUND}`;
+    }
+
+    const authToken = await this._service.getToken(existingUser.id);
+    console.log("authToken sfsdf" + authToken);
+    if (authToken.hashedToken) {
+      return "User was authenticated";
     }
 
     const validPassword = await Bun.password.verify(password, existingUser.password);

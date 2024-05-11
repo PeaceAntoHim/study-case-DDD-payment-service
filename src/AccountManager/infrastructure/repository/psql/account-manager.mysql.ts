@@ -10,6 +10,22 @@ export class AccountManagerRepository implements IAccountManagerRepository {
     this._prisma = prisma;
     this._hasher = Bun.password;
   }
+  async findToken(id: number): Promise<any> {
+    try {
+      const authToken = await this._prisma.authToken.findUnique({
+        where: { userId: id },
+        select: {
+          id: true,
+          userId: true,
+          hashedToken: true,
+        },
+      });
+      return authToken;
+    } catch (error: any) {
+      console.error(`${this._TAG} Got Error at func: findToken(): ${error.message}`);
+      throw new Error(`${this._TAG} Got Error at func: findToken(): ${error.message}`);
+    }
+  }
 
   async insertToken(DTO: TInsertToken) {
     try {

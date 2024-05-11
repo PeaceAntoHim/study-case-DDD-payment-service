@@ -19,4 +19,8 @@ export class AccountManagerService implements IAccountManagerService {
   async get(email: string): Promise<any> {
     return await this._repository.find(email);
   }
+
+  async getToken(id: number): Promise<any> {
+    return await this._repository.findToken(id);
+  }
 }

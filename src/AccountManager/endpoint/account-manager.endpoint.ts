@@ -10,7 +10,7 @@ import {
   TSigninRes,
   TSignupRes,
 } from "../constant/account-manager.type";
-import { STATUS_CODE, sleep } from "../constant/account-manager.constant";
+import { BAD_REQUEST, STATUS_CODE, sleep } from "../constant/account-manager.constant";
 import { randomUUID } from "crypto";
 import { IAccountManagerCommand } from "../application/command/account-manager.interface";
 
@@ -75,7 +75,7 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
               return response.message;
             }
             set.status = STATUS_CODE.BAD_REQUEST;
-            return new Response(response);
+            return response;
           },
         }
       )
@@ -105,6 +105,13 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
       const { email, password } = req;
       const dataRes = await this._query.signin(email, password);
       console.info(`${this._TAG} dataRes: ${JSON.stringify(dataRes)}`);
+      if (!dataRes.id) {
+        return {
+          message: dataRes,
+          token: "",
+          statusCode: STATUS_CODE.BAD_REQUEST,
+        };
+      }
 
       const refreshId = randomUUID();
       const refreshToken = await jwtRefresh.sign({
@@ -136,6 +143,11 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
       };
     } catch (err: any) {
       console.error(`${this._TAG} Got Error at func signin: ${err.message}`);
+      return {
+        token: "",
+        statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR,
+        message: `${this._TAG} Got Error at func signin: ${err.message}`,
+      };
     }
   }
 
@@ -157,7 +169,7 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
     } catch (err: any) {
       console.error(`${this._TAG} Got Error at func signup: ${err.message}`);
       return {
-        message: err.message,
+        message: "Internal Server Error",
         statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR,
       };
     }

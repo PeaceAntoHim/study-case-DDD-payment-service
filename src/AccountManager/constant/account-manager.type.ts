@@ -7,7 +7,7 @@ export type TInsert = { name: string; role: string; email: string; password: str
 export type TInsertToken = { hashedToken: string; id: string; userId: number };
 export type TRepositoryPrisma = PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
 
-export type TSigninRes = { statusCode: number; token: string; message: { email: string; role: string } };
+export type TSigninRes = { statusCode: number; token: string; message: { email: string; role: string } | string };
 export type TSigninResDb = { id: number; email: string; role: string };
 export type TSignupRes = { statusCode: number; message: string };
 
