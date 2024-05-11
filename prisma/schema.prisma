@@ -19,14 +19,14 @@ model User {
   email             String?     @unique
   password          String
   role              String      @default("user")
-  refreshTokens   RefreshToken[]
+  authToken         AuthToken[]
   paymentAccounts   PaymentAccount[] 
   createdAt         DateTime    @default(now()) @map("created_at")
   updatedAt         DateTime    @updatedAt @map("updated_at")
   @@map("users")
 }
 
-model RefreshToken {
+model AuthToken {
   id          String   @id @unique @default(uuid())
   hashedToken String
   userId      Int

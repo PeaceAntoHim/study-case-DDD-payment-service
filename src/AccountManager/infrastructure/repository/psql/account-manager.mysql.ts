@@ -13,7 +13,7 @@ export class AccountManagerRepository implements IAccountManagerRepository {
 
   async insertToken(DTO: TInsertToken) {
     try {
-      await this._prisma.refreshToken.create({
+      await this._prisma.authToken.create({
         data: {
           id: DTO.id,
           userId: DTO.userId,
