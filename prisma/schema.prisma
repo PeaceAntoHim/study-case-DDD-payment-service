@@ -35,33 +35,19 @@ model AuthToken {
   createdAt   DateTime @default(now())
 }
 
-
-model Transaction {
+// Payment History: Records of transactions
+model PaymentHistory {
   id            Int     @id @default(autoincrement())
   transactionId String  @unique @default(uuid())
   amount        Float
   status        String
   toAddress     String
   currency      String
-  historyId     Int
-  history       PaymentHistory  @relation(fields: [historyId], references: [id])
   timestamp     DateTime    @default(now())
-  createdAt     DateTime    @default(now()) @map("created_at")
-  updatedAt     DateTime    @updatedAt @map("updated_at")
-  @@map("transactions")
-}
-
-
-// Payment History: Records of transactions
-model PaymentHistory {
-  id            Int     @id @default(autoincrement())
-  historyId     String  @unique @default(uuid())
   accountId     Int
   account       PaymentAccount @relation(fields: [accountId], references: [id])
-  transactions  Transaction[]
   createdAt     DateTime    @default(now()) @map("created_at")
   updatedAt     DateTime    @updatedAt @map("updated_at")
-  @@map("payment_historys")
 }
 
 // Payment Account: One user can have multiple accounts like credit, debit, loan...
@@ -76,7 +62,5 @@ model PaymentAccount {
   paymentHistory  PaymentHistory[]
   updatedAt       DateTime    @updatedAt
   createdAt       DateTime    @default(now())
-
-  @@map("payment_accounts")
 }
 

@@ -4,7 +4,7 @@ import { AccountManagerQuery } from "@/AccountManager/application/query/account-
 import { AccountManagerCommand } from "@/AccountManager/application/command/account-manager.command";
 import Elysia from "elysia";
 import { AccountManagerEndpoint } from "@/AccountManager/endpoint/account-manager.endpoint";
-import { AccountManagerRepository } from "@/AccountManager/infrastructure/repository/psql/account-manager.mysql";
+import { AccountManagerRepository } from "@/AccountManager/infrastructure/repository/psql/account-manager.psql";
 
 class Application {
   private _repositoryUser;

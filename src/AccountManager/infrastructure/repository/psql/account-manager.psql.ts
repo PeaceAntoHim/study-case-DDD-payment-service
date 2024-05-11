@@ -23,7 +23,6 @@ export class AccountManagerRepository implements IAccountManagerRepository {
       return authToken;
     } catch (error: any) {
       console.error(`${this._TAG} Got Error at func: findToken(): ${error.message}`);
-      throw new Error(`${this._TAG} Got Error at func: findToken(): ${error.message}`);
     }
   }
 
@@ -38,7 +37,6 @@ export class AccountManagerRepository implements IAccountManagerRepository {
       });
     } catch (error: any) {
       console.error(`${this._TAG} Got Error at func: insertToken(): ${error.message}`);
-      throw new Error(`${this._TAG} Got Error at func: insertToken(): ${error.message}`);
     }
   }
 
@@ -75,7 +73,6 @@ export class AccountManagerRepository implements IAccountManagerRepository {
       return user;
     } catch (error: any) {
       console.error(`${this._TAG} Got Error at func: find(): ${error.message}`);
-      throw new Error(`${this._TAG} Got Error at func: find(): ${error.message}`);
     }
   }
 }

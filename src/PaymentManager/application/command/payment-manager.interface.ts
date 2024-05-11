@@ -1,4 +1,6 @@
+import { TTransactionDTO } from "@/PaymentManager/constant/payment-manager.type";
+
 export interface IPaymentManagerCommand {
-  send(): Promise<string>;
-  withdraw(): Promise<string>;
+  send(transaction: TTransactionDTO): Promise<string>;
+  withdraw(transaction: TTransactionDTO): Promise<string>;
 }
