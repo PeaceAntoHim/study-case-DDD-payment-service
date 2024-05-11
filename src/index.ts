@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
-import { endpointsUser } from "./dependency-injection/dependency-injection";
+import routes from "./routes/routes";
+// import { endpointsUser } from "./dependency-injection/dependency-injection";
 const app = new Elysia();
 
 app
@@ -20,7 +21,8 @@ app
   .onError(({ code, error }) => {
     return new Response(error.toString());
   })
-  .group("/api", (app) => app.use(endpointsUser))
+  .group("/api", (app) => app.use(routes.endpointsUser as any))
+  .group("/api", (app) => app.use(routes.endpointPayment as any))
   .listen(process.env.PORT ?? 3000);
 
 console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);

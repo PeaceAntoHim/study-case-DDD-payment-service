@@ -2,7 +2,7 @@ import { TInsert, TInsertToken, TRepositoryPrisma } from "@/AccountManager/const
 import { IPaymentManagerRepository } from "../payment-manager.repository.interface";
 import { TPaymentAccountDTO, TTransactionDTO } from "@/PaymentManager/constant/payment-manager.type";
 
-export class AccountManagerRepository implements IPaymentManagerRepository {
+export class PaymentManagerRepository implements IPaymentManagerRepository {
   private _TAG;
   private _prisma: TRepositoryPrisma;
   constructor(prisma: TRepositoryPrisma) {
