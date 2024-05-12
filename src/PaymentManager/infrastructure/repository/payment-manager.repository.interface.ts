@@ -3,5 +3,6 @@ import { TPaymentAccountDTO, TTransactionDTO } from "@/PaymentManager/constant/p
 export interface IPaymentManagerRepository {
   insertPaymentAccount(DTO: TPaymentAccountDTO): Promise<string | undefined>;
   insertPaymentHistory(DTO: TTransactionDTO): Promise<string | undefined>;
-  // findPaymentAccount(DTO: TPaymentAccountDTO): Promise(email: string): Promise<string>;
+  findPaymentAccount(accountId: number): Promise<any>;
+  findPaymentHistory(accountId: number): Promise<any>;
 }

@@ -4,6 +4,6 @@ export interface IPaymentManagerService {
   addPaymentAccount(DTO: TPaymentAccountDTO): Promise<string | undefined>;
   addTransaction(DTO: TTransactionDTO): Promise<string | undefined>;
 
-  getPaymentAccount(): Promise<any>;
-  getTransaction(): Promise<any>;
+  getPaymentAccount(accountId: number): Promise<any>;
+  getTransaction(accountId: number): Promise<any>;
 }

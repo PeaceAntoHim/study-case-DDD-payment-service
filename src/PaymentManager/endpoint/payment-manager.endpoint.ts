@@ -59,6 +59,64 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
             return response;
           },
         }
+      )
+      .post(
+        "/send",
+        async ({
+          jwtAccess,
+          cookie: { auth },
+          body,
+        }: {
+          jwtAccess: Record<string, string | number> & IJWT;
+          cookie: { auth: Cookie<any> };
+          body: TTransactionDTO;
+        }) => await this.sendTransaction(jwtAccess, auth, body),
+        {
+          beforeHandle: [
+            function setup() {},
+            async function delay() {
+              await sleep();
+            },
+          ],
+          afterHandle({ response, set }: { response: TPaymentRes | any; set: TCustomSetElysia }) {
+            if (response.statusCode === 200) {
+              console.log(response);
+              set.status = response.statusCode;
+              return response.message;
+            }
+            set.status = response.statusCode;
+            return response;
+          },
+        }
+      )
+      .post(
+        "/withdraw",
+        async ({
+          jwtAccess,
+          cookie: { auth },
+          body,
+        }: {
+          jwtAccess: Record<string, string | number> & IJWT;
+          cookie: { auth: Cookie<any> };
+          body: TTransactionDTO;
+        }) => await this.withdrawTransaction(jwtAccess, auth, body),
+        {
+          beforeHandle: [
+            function setup() {},
+            async function delay() {
+              await sleep();
+            },
+          ],
+          afterHandle({ response, set }: { response: TPaymentRes | any; set: TCustomSetElysia }) {
+            if (response.statusCode === 200) {
+              console.log(response);
+              set.status = response.statusCode;
+              return response.message;
+            }
+            set.status = response.statusCode;
+            return response;
+          },
+        }
       );
   }
 
@@ -67,7 +125,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     auth: Cookie<any>,
     req: TPaymentAccountDTO
   ): Promise<TPaymentRes> {
-    const authUser = jwtAccess.verify(auth.value);
+    const authUser = await jwtAccess.verify(auth.value);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,
@@ -86,7 +144,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     auth: Cookie<any>,
     req: TTransactionDTO
   ): Promise<TPaymentRes> {
-    const authUser = jwtAccess.verify(auth.value);
+    const authUser = await jwtAccess.verify(auth.value);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,
@@ -97,7 +155,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     const resSendTransaction = await this._command.send(req);
     return {
       statusCode: STATUS_CODE.CREATED,
-      message: resSendTransaction as string,
+      message: resSendTransaction,
     };
   }
 
@@ -106,7 +164,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     auth: Cookie<any>,
     req: TTransactionDTO
   ): Promise<TPaymentRes> {
-    const authUser = jwtAccess.verify(auth.value);
+    const authUser = await jwtAccess.verify(auth.value);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,
@@ -117,7 +175,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     const resWithdrawTransaction = await this._command.withdraw(req);
     return {
       statusCode: STATUS_CODE.CREATED,
-      message: resWithdrawTransaction as string,
+      message: resWithdrawTransaction,
     };
   }
 }

@@ -14,8 +14,8 @@ export class PaymentManagerService implements IPaymentManagerService {
   addTransaction(DTO: TTransactionDTO): Promise<string | undefined> {
     return this._repository.insertPaymentHistory(DTO);
   }
-  getPaymentAccount(): Promise<any> {
-    throw new Error("Method not implemented.");
+  getPaymentAccount(accountId: number): Promise<any> {
+    return this._repository.findPaymentAccount(accountId);
   }
   getTransaction(): Promise<any> {
     throw new Error("Method not implemented.");

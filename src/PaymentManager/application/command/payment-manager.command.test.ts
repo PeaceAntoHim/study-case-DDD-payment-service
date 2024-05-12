@@ -24,26 +24,35 @@ export class PaymentManagerCommand implements IPaymentManagerCommand {
   }
 
   async send(transaction: TTransactionDTO): Promise<string> {
+    const paymentAccount = await this._service.getPaymentAccount(transaction.accountId);
+    if (!paymentAccount) {
+      return "Sorry this account id does not exist please create payment account first";
+    }
+
     return this._processTransaction(transaction)
       .then((transactionId) => {
-        console.log("transaction processing completed for:", transactionId);
-        return `Transaction processing completed for this transaction id: ${transactionId}`;
+        console.log("Send transaction processing completed for:", transactionId);
+        return `Send transaction processing completed for this transaction id: ${transactionId}`;
       })
       .catch((error: any) => {
-        console.error("transaction processing failed:", error.message);
-        return `transaction processing failed: ${error.message}`;
+        console.error("Send transaction processing failed:", error.message);
+        return `Send transaction processing failed: ${error.message}`;
       });
   }
 
   async withdraw(transaction: TTransactionDTO): Promise<string> {
+    const paymentAccount = await this._service.getPaymentAccount(transaction.accountId);
+    if (!paymentAccount) {
+      return "Sorry this account id does not exist please create payment account first";
+    }
     return this._processTransaction(transaction)
       .then((transactionId) => {
-        console.log("transaction processing completed for:", transactionId);
-        return `Transaction processing completed for this transaction id: ${transactionId}`;
+        console.log("Withdraw transaction processing completed for:", transactionId);
+        return `Withdraw Transaction processing completed for this transaction id: ${transactionId}`;
       })
       .catch((error: any) => {
-        console.error("transaction processing failed:", error.message);
-        return `transaction processing failed: ${error.message}`;
+        console.error("Withdraw transaction processing failed:", error.message);
+        return `Withdraw transaction processing failed: ${error.message}`;
       });
   }
 
