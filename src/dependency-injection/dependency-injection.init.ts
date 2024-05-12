@@ -36,16 +36,15 @@ export const basicAuthModel = new Elysia().model({
   }),
 });
 
-export const jwtAccessSetup = new Elysia({
-  name: "jwtAccess",
-}).use(
+export const jwtAccessSetup = new Elysia({ name: "jwtAccess" }).use(
   jwt({
     name: "jwtAccess",
+    secret: process.env.JWT_ACCESS_SECRET!,
     schema: t.Object({
       id: t.String(),
     }),
-    secret: process.env.JWT_ACCESS_SECRET!,
-    exp: "5m",
+    // secret: process.env.JWT_ACCESS_SECRET!,
+    // exp: 5 * 60,
   })
 );
 
@@ -58,6 +57,6 @@ export const jwtRefreshSetup = new Elysia({
       id: t.String(),
     }),
     secret: process.env.JWT_REFRESH_SECRET!,
-    exp: "1d",
+    exp: "5m",
   })
 );

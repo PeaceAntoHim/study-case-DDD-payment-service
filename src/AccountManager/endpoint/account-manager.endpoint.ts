@@ -44,20 +44,17 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
     return this._router
       .use(this._basicAuthModel)
       .use(this._jwtAccessSetup)
-      .use(this._jwtRefreshSetup)
       .post(
         "/signin",
         async ({
           jwtAccess,
-          jwtRefresh,
           cookie: { auth },
           body,
         }: {
           jwtAccess: Record<string, string | number> & IJWT;
-          jwtRefresh: Record<string, string | number> & IJWT;
           cookie: { auth: Cookie<any> };
           body: TReqSignin;
-        }) => await this.signin(jwtAccess, jwtRefresh, auth, body),
+        }) => await this.signin(jwtAccess, auth, body),
         {
           body: "basicAuthModel",
           beforeHandle: [
@@ -66,16 +63,6 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
               await sleep();
             },
           ],
-          afterHandle({ response, set }: { response: TSigninRes | any; set: TCustomSetElysia }) {
-            if (response.statusCode === 200) {
-              console.log(response);
-              set.cookie = { token: { value: response.token } };
-              set.status = response.statusCode;
-              return response.message;
-            }
-            set.status = response.statusCode;
-            return response;
-          },
         }
       )
       .post("/signup", async ({ body }: { body: TReqSignup }) => await this.signup(body), {
@@ -96,7 +83,6 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
 
   async signin(
     jwtAccess: Record<string, string | number> & IJWT,
-    jwtRefresh: Record<string, string | number> & IJWT,
     auth: Cookie<any>,
     req: TReqSignin
   ): Promise<TSigninRes | undefined> {
@@ -104,35 +90,26 @@ export class AccountManagerEndpoint implements IAccountManagerEndpoint {
       const { email, password } = req;
       const dataRes = await this._query.signin(email, password);
       console.info(`${this._TAG} dataRes: ${JSON.stringify(dataRes)}`);
-      if (!dataRes.id) {
+      const isAccess = await jwtAccess.verify(auth.value);
+      if (isAccess) {
         return {
-          message: dataRes,
+          message: "User was authenticated",
           token: "",
-          statusCode: STATUS_CODE.BAD_REQUEST,
+          statusCode: STATUS_CODE.UNAUTHORIZED,
         };
       }
 
-      const refreshId = randomUUID();
-      const refreshToken = await jwtRefresh.sign({
-        id: refreshId,
-      });
-      const hashedToken = new Bun.CryptoHasher("sha512").update(refreshToken).digest("hex");
-      const dtoRefreshToken: TInsertToken = {
-        id: refreshId,
-        userId: dataRes.id,
-        hashedToken: hashedToken,
-      };
-      await this._command.refreshToken(dtoRefreshToken);
-      auth.set({
-        value: await jwtAccess.sign({
-          id: String(dataRes.id),
-        }),
-        httpOnly: true,
-        maxAge: 1 * 86400,
-        path: "/api/transaction",
+      const jwtSign = await jwtAccess.sign({
+        id: String(dataRes.id),
       });
 
-      console.log(await jwtAccess.verify(auth.value));
+      auth.set({
+        value: jwtSign,
+        httpOnly: true,
+        maxAge: 5 * 600,
+        sameSite: true,
+        path: "/api",
+      });
 
       return {
         message: dataRes,

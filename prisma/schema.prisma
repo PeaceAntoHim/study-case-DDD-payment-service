@@ -19,21 +19,12 @@ model User {
   email             String?     @unique
   password          String
   role              String      @default("user")
-  authToken         AuthToken[]
   paymentAccounts   PaymentAccount[] 
   createdAt         DateTime    @default(now()) @map("created_at")
   updatedAt         DateTime    @updatedAt @map("updated_at")
   @@map("users")
 }
 
-model AuthToken {
-  id          String   @id @unique @default(uuid())
-  hashedToken String
-  userId      Int      @unique
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  revoked     Boolean  @default(false)
-  createdAt   DateTime @default(now())
-}
 
 // Payment History: Records of transactions
 model PaymentHistory {

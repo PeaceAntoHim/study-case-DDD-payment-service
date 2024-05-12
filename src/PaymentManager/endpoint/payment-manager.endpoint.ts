@@ -126,6 +126,8 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     req: TPaymentAccountDTO
   ): Promise<TPaymentRes> {
     const authUser = await jwtAccess.verify(auth.value);
+    console.log("sdf", auth);
+    console.log(authUser);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,
@@ -165,10 +167,11 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     req: TTransactionDTO
   ): Promise<TPaymentRes> {
     const authUser = await jwtAccess.verify(auth.value);
+    console.log(auth);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,
-        message: "Unauthorized",
+        message: "Unauthorized" + authUser,
       };
     }
 

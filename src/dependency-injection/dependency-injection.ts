@@ -64,4 +64,3 @@ class Application {
 }
 
 export const App = new Application();
-

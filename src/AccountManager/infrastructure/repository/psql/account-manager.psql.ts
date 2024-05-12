@@ -18,6 +18,7 @@ export class AccountManagerRepository implements IAccountManagerRepository {
           id: true,
           userId: true,
           hashedToken: true,
+          refreshToken: true,
         },
       });
       return authToken;
@@ -33,6 +34,7 @@ export class AccountManagerRepository implements IAccountManagerRepository {
           id: DTO.id,
           userId: DTO.userId,
           hashedToken: DTO.hashedToken,
+          refreshToken: DTO.refreshToken,
         },
       });
     } catch (error: any) {

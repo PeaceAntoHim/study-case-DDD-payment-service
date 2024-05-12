@@ -29,9 +29,8 @@ export class AccountManagerQuery implements IAccountManagerQuery {
     }
 
     const authToken = await this._service.getToken(existingUser.id);
-    console.log("authToken sfsdf" + authToken);
-    if (authToken.hashedToken) {
-      return "User was authenticated";
+    if (authToken?.hashedToken) {
+      return authToken;
     }
 
     const validPassword = await Bun.password.verify(password, existingUser.password);

@@ -3,14 +3,13 @@ import { TReqSignin, TReqSignup, TSigninRes, TSignupRes } from "../constant/acco
 import { JWTPayloadSpec } from "@elysiajs/jwt";
 
 export interface IJWT extends JWTPayloadSpec {
-  verify(param: string): Promise<string>;
+  verify(param: string): Promise<string | Record<string, string>>;
   sign(morePayload: Record<string, string | number> & JWTPayloadSpec): Promise<Bun.BlobOrStringOrBuffer>;
 }
 export interface IAccountManagerEndpoint {
   registerRoute(): Promise<{ default: Elysia | undefined }>;
   signin(
     jwtAccess: Record<string, string | number> & IJWT,
-    jwtRefresh: Record<string, string | number> & IJWT,
     auth: Cookie<any>,
     req: TReqSignin
   ): Promise<TSigninRes | undefined>;

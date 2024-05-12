@@ -10,6 +10,7 @@
     "migrate": "bun prisma migrate dev --name be-assignment"
   },
   "dependencies": {
+    "@elysiajs/cookie": "^0.8.0",
     "@elysiajs/jwt": "^1.0.2",
     "@elysiajs/swagger": "^1.0.5",
     "@prisma/client": "5.13.0",
