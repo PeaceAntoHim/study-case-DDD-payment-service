@@ -58,6 +58,10 @@ export class PaymentManagerCommand implements IPaymentManagerCommand {
 
   async createAccount(data: TPaymentAccountDTO): Promise<string | undefined> {
     try {
+      const { userId, type, paymentNumber, balance } = data;
+      if (!userId && type && paymentNumber && balance) {
+        return "Invalid input";
+      }
       const account = await this._service.addPaymentAccount(data);
       return account as string;
     } catch (error: any) {}

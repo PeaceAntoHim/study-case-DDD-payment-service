@@ -125,9 +125,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     auth: Cookie<any>,
     req: TPaymentAccountDTO
   ): Promise<TPaymentRes> {
-    const authUser = await jwtAccess.verify(auth.value);
-    console.log("sdf", auth);
-    console.log(authUser);
+    const authUser: any = await jwtAccess.verify(auth.value);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,
@@ -135,7 +133,14 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
       };
     }
 
-    const resCreateAccount = await this._command.createAccount(req);
+    const dtoAccount: TPaymentAccountDTO = {
+      userId: Number(authUser.id) || req.userId,
+      type: req.type,
+      paymentNumber: req.paymentNumber,
+      balance: req.balance,
+    };
+
+    const resCreateAccount = await this._command.createAccount(dtoAccount);
     return {
       statusCode: STATUS_CODE.CREATED,
       message: resCreateAccount as string,
@@ -154,6 +159,7 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
       };
     }
 
+    // const accountId = await 
     const resSendTransaction = await this._command.send(req);
     return {
       statusCode: STATUS_CODE.CREATED,
@@ -167,7 +173,6 @@ export class PaymentManagerEndpoint implements IPaymentManagerEndpoint {
     req: TTransactionDTO
   ): Promise<TPaymentRes> {
     const authUser = await jwtAccess.verify(auth.value);
-    console.log(auth);
     if (!authUser) {
       return {
         statusCode: STATUS_CODE.UNAUTHORIZED,

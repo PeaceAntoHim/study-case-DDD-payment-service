@@ -11,8 +11,8 @@ export class PaymentManagerRepository implements IPaymentManagerRepository {
   }
   async findPaymentAccount(accountId: number): Promise<any> {
     try {
-      const paymentAccount = await this._prisma.paymentAccount.findUnique({
-        where: { id: accountId },
+      const paymentAccount = await this._prisma.paymentAccount.findFirst({
+        where: { user: { id: 1 } },
         select: {
           accountId: true,
         },

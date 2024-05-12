@@ -5,11 +5,11 @@ import { AccountManagerCommand } from "@/AccountManager/application/command/acco
 import Elysia from "elysia";
 import { AccountManagerEndpoint } from "@/AccountManager/endpoint/account-manager.endpoint";
 import { AccountManagerRepository } from "@/AccountManager/infrastructure/repository/psql/account-manager.psql";
-import { PaymentManagerService } from "@/PaymentManager/domain/payment-manager.service.test";
 import { PaymentManagerQuery } from "@/PaymentManager/application/query/payment-manager.query";
 import { PaymentManagerCommand } from "@/PaymentManager/application/command/payment-manager.command.test";
 import { PaymentManagerRepository } from "@/PaymentManager/infrastructure/repository/psql/payment-manager.psql";
 import { PaymentManagerEndpoint } from "@/PaymentManager/endpoint/payment-manager.endpoint";
+import { PaymentManagerService } from "@/PaymentManager/domain/payment-manager.service";
 
 class Application {
   private _repositoryUser;

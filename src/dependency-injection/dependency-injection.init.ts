@@ -10,17 +10,17 @@ declare global {
 export const prismaConnection = (): PrismaClient => {
   try {
     console.info("Init prisma connection");
-    let prisma: PrismaClient;
+    const prisma: PrismaClient = new PrismaClient();
 
-    if (process.env.NODE_ENV != "production") {
-      // Use global object if it exists, otherwise create and assign
-      if (!global.prisma) {
-        global.prisma = new PrismaClient();
-      }
-      prisma = global.prisma;
-    } else {
-      prisma = new PrismaClient();
-    }
+    // if (process.env.NODE_ENV != "production") {
+    //   // Use global object if it exists, otherwise create and assign
+    //   if (!global.prisma) {
+    //     global.prisma = ;
+    //   }
+    //   prisma = global.prisma;
+    // } else {
+    //   prisma = new PrismaClient();
+    // }
 
     return prisma;
   } catch (e) {
