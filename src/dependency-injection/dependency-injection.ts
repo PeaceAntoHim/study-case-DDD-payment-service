@@ -12,6 +12,10 @@ import { PaymentManagerEndpoint } from "@/PaymentManager/endpoint/payment-manage
 import { PaymentManagerService } from "@/PaymentManager/domain/payment-manager.service";
 
 class Application {
+  /**
+   * @property
+   * @name User
+   */
   private _repositoryUser;
   private _serviceUser;
   private _queryUser;
@@ -19,6 +23,10 @@ class Application {
   private _routerUser;
   private _endpointUser;
 
+  /**
+   * @property
+   * @name Payment
+   */
   private _repositoryPayment;
   private _servicePayment;
   private _queryPayment;
@@ -27,6 +35,12 @@ class Application {
   private _endpointPayment;
 
   constructor() {
+    /**
+     * @constructor
+     * @class
+     * @injection
+     * @name AccountManager/DomainUser
+     */
     this._repositoryUser = new AccountManagerRepository(prismaConnection());
     this._serviceUser = new AccountManagerService(this._repositoryUser);
     this._queryUser = new AccountManagerQuery(this._serviceUser);
@@ -41,6 +55,12 @@ class Application {
       jwtRefreshSetup
     );
 
+    /**
+     * @constructor
+     * @class
+     * @injection
+     * @name PaymentManager/DomainPayment
+     */
     this._repositoryPayment = new PaymentManagerRepository(prismaConnection());
     this._servicePayment = new PaymentManagerService(this._repositoryPayment);
     this._queryPayment = new PaymentManagerQuery(this._servicePayment);
